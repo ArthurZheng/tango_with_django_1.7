@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block content %}
+    <h2>Rango's Home</h2>
+    {%  if user.is_authenticated %}
+        <h3>Rango says hello {{ user.username }}. Welcome abord.</h3>
+        <h3><a href="{% url 'rango:restricted' %}">Go to Restricted View</a></h3>
+        <h2><a href="{% url 'rango:add_category' %}">Add a Category</a></h2>
+        <h3><a href="{% url 'rango:logout' %}">Log Out</a></h3>
+    {% else %}
+        <h3>Rango says hello there, please login</h3>
+        <h3><a href="{% url 'rango:register' %}">Registered with Rango</a></h3>
+        <h3><a href="{% url 'rango:login' %}">Login to Rango</a></h3>
+    {% endif %}
+
+    {% if category_list %}
+        <ul>
+        {% for category in category_list %}
+            <li>Name:<a href="{% url 'rango:detail2' category.id %}">{{ category.name }}</a> -- Views: {{ category.views }} -- Likes: {{ category.likes }}</li>
+            <li>Name:<a href="{% url 'rango:category' category.slug %}">{{ category.name }}</a> -- Views: {{ category.views }} -- Likes: {{ category.likes }}</li>
+        {% endfor %}
+        </ul>
+        <br /><hr />
+        <h2>Top Up Category Likes + 1 </h2>
+        {%  if user.is_authenticated %}
+            {% for cat in category_list %}
+                <form action="{% url 'rango:like' cat.id %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="likes"/>
+                    Total Like: {{ cat.likes }}   Like{{ cat.likes | pluralize }}<input type="submit" name="category" value="Like {{ cat.name }}"/>
+                </form>
+            {% endfor %}
+        {% else %}
+            <p>Please log in to Rango first.</p>
+        {% endif %}
+
+        <hr />
+        <h2>Top Up Category Views + 10 </h2>
+        {% if user.is_authenticated %}
+            {% for cate in category_list %}
+                <form action="{% url 'rango:increaseView' cate.id %}" method="post">
+                    {% csrf_token %}
+                    Total Views: {{ cate.views }} view{{ cate.views | pluralize }} <input type="hidden" name="category" value="{{ cate.id}}" />
+                    <input type="submit" value="Views + 10"/>
+                </form>
+            {% endfor %}
+        {% else %}
+            <p>Sorry, please log into Rango first to Like</p>
+        {% endif %}
+        <br /><hr />
+
+        <h2>Top Up Category Likes by User </h2>
+        {% if user.is_authenticated %}
+            {% for categ in  category_list %}
+                <form method="post" action="{% url 'rango:increaseLike' categ.id %}">
+                    {% csrf_token %}
+                    <label>Insert How Many Likes You Want to Increase</label>
+                    <input type="text" name="likes" value="0"/>
+                    <input type="submit" value="Increase Like" />
+                </form>
+            {% endfor %}
+        {% else %}
+            <p>Please login to Rango to Like Rango</p>
+        {% endif %}
+        <br /><hr />
+
+    {% else %}
+        <p>Sorry, no category to show.</p>
+    {% endif %}
+    <img src="{% static 'images/rango.jpg' %}" alt="Rango 2 image"/> <br />
+    <h2>Hi, You have visited {{ visits }} times.</h2>
+    <a href="{% url 'rango:about' %}">Go About</a>
+{% endblock content %}

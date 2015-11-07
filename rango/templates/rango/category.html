@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %} {{ category_name }} {%  endblock %}
+{% block content %}
+    <h2>Rango's Category Page</h2>
+    <h3>Category: {{ category_name }}</h3><hr />
+    {% if category %}
+        {% if pages %}
+            <ul>
+                {% for page in pages %}
+                    <li>Category: {{ page.category }} - Title: <a href="{{ page.url }}">{{ page.title }}</a> - Views: {{ page.views }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Sorry, no page to show.</p>
+        {% endif %}
+        {%  if user.is_authenticated %}
+            <h2><a href="{% url 'rango:add_page' category.slug %}">Add New Page in Category {{ category.name }}</a></h2>
+        {% endif %}
+    {% else %}
+        <p>Sorry, the category {{ category_name }} does not exist</p>
+    {% endif %}
+
+    <img src="{% static 'images/rango3.jpg' %}" alt="Rango 2 image"/> <br />
+    <a href="{% url 'rango:index' %}">Go Home</a>
+{% endblock content %}

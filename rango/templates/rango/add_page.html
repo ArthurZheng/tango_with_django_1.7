@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block content %}
+    <h2>Rango's Add Page</h2>
+    <hr />
+    <form action="{% url 'rango:add_page' category.slug %}" method="post">
+         {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" name="submit" value="Add Page"/>
+    </form>
+
+{% endblock content %}

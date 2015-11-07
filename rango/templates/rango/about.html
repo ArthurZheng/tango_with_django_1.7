@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+    <h2>Rango's About</h2>
+    {{ about }} <br />
+    <img src="{% static 'images/rango.jpg' %}" alt="Image of Rango"/><br />
+    <h3>Hello, you have visited our page {{ visits }} time{{ visits| pluralize }}</h3>
+    <a href="{%  url 'rango:index' %}">Back Home</a>
+{% endblock %}
+
+{% block footer %}
+    <p>Rango About Footer</p>
+{% endblock %}

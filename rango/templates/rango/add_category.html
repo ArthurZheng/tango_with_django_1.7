@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block content %}
+    <h2>Rango's Add Category Page</h2>
+
+    <form action="{% url 'rango:add_category'  %}" method="post">
+        {% csrf_token %}
+        {%  for hidden in form.hidden_fields %}
+            Hidden Fields - - {{ hidden }}<br />
+        {% endfor %}
+
+        {% for field in form.visible_fields %}
+           Error: {{ field.errors }} <br />
+           Help Text:  {{ field.help_text }} <br />
+           Field: {{ field }} <br />
+        {% endfor %}
+        <input type="submit" name="submit" value="Add Category"/>
+    </form>
+
+
+{% endblock content %}

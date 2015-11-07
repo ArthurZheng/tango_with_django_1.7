@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %} Detail {% endblock %}
+{% block content %}
+    <h2>Rango's Details</h2>
+    {% if error_message %}
+        {{ error_message }}
+    {% endif %}
+    {% if category %}
+        <ul>
+        {% for page in category.page_set.all %}
+            <li>Category - {{ page.category }} - Title - <a href="{{ page.url }}">{{ page.title }}</a> - Views - {{ page.views }}</li>
+        {% endfor %}
+        </ul>
+        <br /> <hr />
+        {% if user.is_authenticated %}
+            {% for pag in category.page_set.all %}
+                <form method="post" action="{% url 'rango:increaseDetailView' category.id %}">
+                    {% csrf_token %}
+                    <input type="radio" name="views" value="{{ pag.id }}"/>
+                    <label>{{ pag.title }}</label>
+                    <input type="submit" value="Views + 5" />
+                </form>
+            {% endfor %}
+        {% else %}
+            <p>Log in to Rango to add View Rango</p>
+        {% endif %}
+    {% else %}
+        <p>Sorry, no category to show.</p>
+    {% endif %}
+    <img src="{% static 'images/rango2.jpg' %}" alt="Rango 2 image"/> <br />
+    <a href="{% url 'rango:index' %}">Go Home</a>
+{% endblock content %}

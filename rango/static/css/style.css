@@ -1,0 +1,9 @@
+h1, h2, h3 {
+    color:purple;
+}
+
+body {
+    /*#image path is relative to the css file location*/
+    /*background: url('../images/django_logo2.png') no-repeat;*/
+    background-color: aquamarine;
+}
